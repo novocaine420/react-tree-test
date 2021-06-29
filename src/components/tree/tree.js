@@ -4,34 +4,38 @@ import values from 'lodash/values';
 import TreeNode from "../tree-node/tree-node";
 
 const data = {
-    '/root': {
-        path: '/root',
+    'a.com': {
+        path: 'a.com',
         isRoot: true,
         isExpanded: true,
-        children: ['/root/david', '/root/jslancer'],
+        children: ['a.com/shopping', 'a.com/blog'],
     },
-    '/root/david': {
-        path: '/root/david',
-        children: ['/root/david/readme.md'],
+    'a.com/shopping': {
+        path: 'a.com/shopping',
+        children: ['a.com/shopping/page1.html', 'a.com/shopping/page2.html', 'a.com/shopping/cart'],
     },
-    '/root/david/readme.md': {
-        path: '/root/david/readme.md'
+    'a.com/shopping/page1.html': {
+        path: 'a.com/shopping/page1.html',
     },
-    '/root/jslancer': {
-        path: '/root/jslancer',
-        children: ['/root/jslancer/projects', '/root/jslancer/vblogs'],
+    'a.com/shopping/page2.html': {
+        path: 'a.com/shopping/page2.html'
     },
-    '/root/jslancer/projects': {
-        path: '/root/jslancer/projects',
-        children: ['/root/jslancer/projects/treeview'],
+    'a.com/shopping/cart': {
+        path: 'a.com/shopping/cart',
+        children: ['a.com/shopping/cart/page1.html'],
     },
-    '/root/jslancer/projects/treeview': {
-        path: '/root/jslancer/projects/treeview',
-        children: [],
+    'a.com/shopping/cart/page1.html': {
+        path: 'a.com/shopping/cart/page1.html'
     },
-    '/root/jslancer/vblogs': {
-        path: '/root/jslancer/vblogs',
-        children: [],
+    'a.com/blog': {
+        path: 'a.com/blog',
+        children: ['a.com/blog/blog1.html', 'a.com/blog/blog2.html'],
+    },
+    'a.com/blog/blog1.html': {
+        path: 'a.com/blog/blog1.html',
+    },
+    'a.com/blog/blog2.html': {
+        path: 'a.com/blog/blog2.html',
     },
 }
 
@@ -44,7 +48,6 @@ const Tree = ({ onSelect }) => {
     }, [nodes]);
 
     const onToggle = useCallback((node) => {
-        console.log('clicked', node);
         nodes[node.path].isExpanded = !node.isExpanded;
         setNodes({...nodes});
     }, [setNodes, nodes]);
