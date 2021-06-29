@@ -32,7 +32,7 @@ const NodeIcon = styled.div`
 
 
 const TreeNode = (props) => {
-    const {node, getChildNodes, level = 0, onToggle, onNodeSelect } = props;
+    const {node, getChildNodes, level, onToggle } = props;
     return (
             <>
                 <StyledTreeNode level={level} type={node.type}>
@@ -43,7 +43,7 @@ const TreeNode = (props) => {
                         { node.children?.length > 0 && (node.isExpanded ? <FaMinus /> : <FaPlus />) }
                     </NodeIcon>
 
-                    <span role="button" onClick={() => onNodeSelect(node)}>
+                    <span role="button">
                       { getNodeLabel(node) }
                     </span>
                 </StyledTreeNode>
@@ -64,8 +64,11 @@ TreeNode.propTypes = {
     node: PropTypes.object.isRequired,
     getChildNodes: PropTypes.func.isRequired,
     level: PropTypes.number.isRequired,
-    onToggle: PropTypes.func.isRequired,
-    onNodeSelect: PropTypes.func.isRequired,
+    onToggle: PropTypes.func.isRequired
 };
+
+TreeNode.defaultProps = {
+    level: 0
+}
 
 export default TreeNode;

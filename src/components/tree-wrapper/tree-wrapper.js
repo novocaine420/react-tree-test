@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components';
+import values from 'lodash/values';
 import Tree from "../tree/tree";
 
 const StyledTreeWrapper = styled.div`
@@ -11,19 +12,25 @@ const StyledTreeWrapper = styled.div`
 `;
 
 const TreeWrapper = () => {
-    const [selected, setSelected] = useState(null);
+    const [expandedKeys, setExpandedKeys] = useState([]);
 
     useEffect(() => {
-        console.log('Selected = ', selected);
-    }, [selected]);
+        localStorage.setItem('treeKeys', JSON.stringify(expandedKeys));
+    }, [expandedKeys])
 
-    const onSelect = useCallback((node) => {
-        setSelected(node);
-    }, [setSelected]);
+    const onExpand = useCallback((nodes) => {
+        const expanded = [];
+        values(nodes).forEach(node => {
+            if(node.isExpanded === true) {
+                expanded.push(node.path);
+            }
+        });
+        setExpandedKeys(expanded)
+    }, [setExpandedKeys]);
 
     return (
         <StyledTreeWrapper>
-            <Tree onSelect={onSelect} />
+            <Tree onExpand={onExpand} />
         </StyledTreeWrapper>
     );
 };

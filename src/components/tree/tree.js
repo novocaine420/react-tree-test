@@ -1,46 +1,20 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import values from 'lodash/values';
 import TreeNode from "../tree-node/tree-node";
+import data from '../../mock/data.json';
 
-const data = {
-    'a.com': {
-        path: 'a.com',
-        isRoot: true,
-        isExpanded: true,
-        children: ['a.com/shopping', 'a.com/blog'],
-    },
-    'a.com/shopping': {
-        path: 'a.com/shopping',
-        children: ['a.com/shopping/page1.html', 'a.com/shopping/page2.html', 'a.com/shopping/cart'],
-    },
-    'a.com/shopping/page1.html': {
-        path: 'a.com/shopping/page1.html',
-    },
-    'a.com/shopping/page2.html': {
-        path: 'a.com/shopping/page2.html'
-    },
-    'a.com/shopping/cart': {
-        path: 'a.com/shopping/cart',
-        children: ['a.com/shopping/cart/page1.html'],
-    },
-    'a.com/shopping/cart/page1.html': {
-        path: 'a.com/shopping/cart/page1.html'
-    },
-    'a.com/blog': {
-        path: 'a.com/blog',
-        children: ['a.com/blog/blog1.html', 'a.com/blog/blog2.html'],
-    },
-    'a.com/blog/blog1.html': {
-        path: 'a.com/blog/blog1.html',
-    },
-    'a.com/blog/blog2.html': {
-        path: 'a.com/blog/blog2.html',
-    },
-}
+const Tree = ({ onExpand }) => {
+    const [nodes, setNodes] = useState({});
 
-const Tree = ({ onSelect }) => {
-    const [nodes, setNodes] = useState(data);
+    useEffect(() => {
+        const expandedItems = JSON.parse(localStorage.getItem('treeKeys'));
+        const newNodes = {...data};
+        expandedItems.forEach(path => {
+            newNodes[path].isExpanded = true;
+        })
+        setNodes({...newNodes});
+    }, [])
 
     const getChildNodes = useCallback((node) => {
         if(!node.children) return [];
@@ -53,8 +27,9 @@ const Tree = ({ onSelect }) => {
     }, [setNodes, nodes]);
 
     const rootNodes = useMemo(() => {
+        onExpand(nodes);
         return values(nodes).filter(node => node.isRoot === true);
-    }, [nodes]);
+    }, [nodes, onExpand]);
 
     return (
         <>
@@ -64,7 +39,6 @@ const Tree = ({ onSelect }) => {
                     node={node}
                     getChildNodes={getChildNodes}
                     onToggle={onToggle}
-                    onNodeSelect={onSelect}
                 />
             ))}
         </>
@@ -72,7 +46,7 @@ const Tree = ({ onSelect }) => {
 };
 
 Tree.propTypes = {
-    onSelect: PropTypes.func.isRequired
+    onExpand: PropTypes.func.isRequired
 };
 
 export default Tree;
